@@ -1,0 +1,23 @@
+{
+  "name": "employeetracker",
+  "version": "1.0.0",
+  "description": "Employee tracker app",
+  "main": "NPM start",
+  "scripts": {
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kimsabraham/employeeTracker.git"
+  },
+  "author": "Abraham Kim",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kimsabraham/employeeTracker/issues"
+  },
+  "homepage": "https://github.com/Kimsabraham/employeeTracker#readme",
+  "dependencies": {
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
+  }
+}

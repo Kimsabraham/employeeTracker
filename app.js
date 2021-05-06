@@ -36,4 +36,39 @@ function questions() {
         "Exit",
       ],
     })
-    
+    // switch case for answers/choices
+    .then(function (answer) {
+      switch (answer.action) {
+        case "View All Employees":
+          viewAll();
+          break;
+
+        case "View All Employees by Department":
+          viewAllDepartment();
+          break;
+
+        case "View All Employees by Role":
+          viewAllRole();
+          break;
+
+        case "Create a Department":
+          createDep();
+          break;
+        case "Create a Role":
+          createRole();
+          break;
+        case "Add an Employee":
+          addEmployee();
+          break;
+       
+        case "Update Employee Role":
+          updateEmployee();
+          break;
+       
+        case "Exit":
+          connection.end();
+          break;
+      }
+    });
+}
+

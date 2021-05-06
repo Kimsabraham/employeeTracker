@@ -40,28 +40,28 @@ function questions() {
     .then(function (answer) {
       switch (answer.action) {
         case "View All Employees":
-          viewAll();
+          viewEmployees();
           break;
 
-        case "View All Employees by Department":
-          viewAllDepartment();
+        case "View employees by their department":
+          viewDepartments();
           break;
 
-        case "View All Employees by Role":
-          viewAllRole();
+        case "View employees by their role":
+          viewRoles();
           break;
 
-        case "Create a Department":
-          createDep();
+        case "Create a new department":
+          newDepartment();
           break;
-        case "Create a Role":
-          createRole();
+        case "Create a new role":
+          newRole();
           break;
-        case "Add an Employee":
-          addEmployee();
+        case "Add a new employee":
+          newEmployee();
           break;
        
-        case "Update Employee Role":
+        case "Update current employee role":
           updateEmployee();
           break;
        
@@ -73,7 +73,7 @@ function questions() {
 }
 
 // view all employees
-function viewAll() {
+function viewEmployees() {
   connection.query(
     `SELECT employee.first_name, employee.last_name, role.salary, role.title, department.name as "Department Name"
     FROM employee_trackerDB.employee
@@ -90,7 +90,7 @@ function viewAll() {
 }
 
 // view employees by department
-function viewAllDepartment() {
+function viewDepartments() {
   connection.query(
     "SELECT department.name FROM employee_trackerDB.department",
     function (err, res) {
@@ -134,7 +134,7 @@ function viewAllDepartment() {
 }
 
 // view  employees by role
-function viewAllRole() {
+function viewRoles() {
   connection.query("SELECT role.title FROM employee_trackerDB.role", function (
     err,
     res
@@ -175,5 +175,30 @@ function viewAllRole() {
         );
       });
   });
+}
+
+// create a department
+function newDepartment() {
+  inquirer
+    .prompt([
+      {
+        name: "name",
+        type: "input",
+        message: "What is the department name?",
+      },
+    ])
+    .then(function (answer) {
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          name: answer.name,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log(`You have created a department ${answer.name}.`)
+          questions();
+        }
+      );
+    });
 }
 

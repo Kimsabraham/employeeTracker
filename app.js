@@ -26,13 +26,13 @@ function questions() {
       name: "action",
       message: "Choose below.",
       choices: [
-        "View All Employees",
-        "View All Employees by Department",
-        "View All Employees by Role",
-        "Create a Department",
-        "Create a Role",
-        "Add an Employee",
-        "Update Employee Role",
+        "View All employees",
+        "View All employees by repartment",
+        "View All employees by role",
+        "Create a new department",
+        "Create a new role",
+        "Add a new employee",
+        "Update employee role",
         "Exit",
       ],
     })
@@ -43,11 +43,11 @@ function questions() {
           viewEmployees();
           break;
 
-        case "View employees by their department":
+        case "View employees by department":
           viewDepartments();
           break;
 
-        case "View employees by their role":
+        case "View employees by role":
           viewRoles();
           break;
 
@@ -61,7 +61,7 @@ function questions() {
           newEmployee();
           break;
        
-        case "Update current employee role":
+        case "Update a employee role":
           updateEmployee();
           break;
        
@@ -108,7 +108,7 @@ function viewDepartments() {
               }
               return choiceArray;
             },
-            message: "Which Department?",
+            message: "Name of department?",
           },
         ])
         .then(function (answer) {
@@ -153,7 +153,7 @@ function viewRoles() {
             }
             return choiceArray;
           },
-          message: "Which Role?",
+          message: "What role?",
         },
       ])
       .then(function (answer) {
@@ -184,7 +184,7 @@ function newDepartment() {
       {
         name: "name",
         type: "input",
-        message: "What is the department name?",
+        message: "Name of the deparment?",
       },
     ])
     .then(function (answer) {
@@ -228,12 +228,12 @@ function newRole() {
           {
             name: "title",
             type: "input",
-            message: "What is the role name?",
+            message: "What is the name of the role?",
           },
           {
             name: "salary",
             type: "input",
-            message: "What is the salary?",
+            message: "Desired salary?",
           },
         ])
         .then(function (answer) {
@@ -314,6 +314,121 @@ function newEmployee() {
               console.log(`You have created an employee ${answer.first_name} ${answer.last_name} with a role of ${role_id}.`)
 
               questions();
+            }
+          );
+        });
+    }
+  );
+}
+
+// update employee role
+function updateEmployee() {
+  connection.query(
+    `SELECT employee.first_name, employee.last_name, role.salary, role.title, role.id, department.name as "Department Name"
+    FROM employee_trackerDB.employee
+    INNER JOIN role ON employee.role_id = role.id
+    INNER JOIN department ON role.department_id = department.id`,
+
+    function (err, res) {
+      if (err) throw err;
+      console.log(res);
+      inquirer
+        .prompt([
+          {
+            name: "employeeChoice",
+            type: "list",
+            choices: function () {
+              var choiceArray1 = [];
+              for (var i = 0; i < res.length; i++) {
+                choiceArray1.push(`${res[i].first_name} ${res[i].last_name}`);
+              }
+              return choiceArray1;
+            },
+            message: "Select employee you wish to edit.",
+          },
+        ])
+        .then(function (answer) {
+          connection.query(
+            `SELECT role.title, role.id, role.salary
+            FROM employee_trackerDB.role`,
+
+            function (err, res4) {
+              if (err) throw err;
+
+              inquirer
+                .prompt([
+                  {
+                    name: "roleChoice",
+                    type: "list",
+                    choices: function () {
+                      var choiceArray2 = [];
+                      for (var i = 0; i < res4.length; i++) {
+                        choiceArray2.push(res4[i].title);
+                      }
+
+                      return choiceArray2;
+                    },
+                    message: "What is the role?",
+                  },
+                ])
+                .then(function (answer2) {
+                  console.log(answer);
+
+                
+                  var role_id, employeeId;
+
+                  // searches for matching name
+                  connection.query(
+                    `SELECT employee.first_name, employee.last_name, employee.id
+            FROM employee_trackerDB.employee`,
+
+                    function (err, res2) {
+                      if (err) throw err;
+
+                      for (var i = 0; i < res2.length; i++) {
+                        if (
+                          `${res2[i].first_name} ${res2[i].last_name}` ===
+                          answer.employeeChoice
+                        ) {
+                          employeeId = res2[i].id;
+                        }
+                      }
+                      // searches for matching title
+                      connection.query(
+                        `SELECT role.title, role.salary, role.id
+              FROM employee_trackerDB.role`,
+
+                        function (err, res3) {
+                          if (err) throw err;
+
+                          for (var i = 0; i < res3.length; i++) {
+                            if (`${res3[i].title}` === answer2.roleChoice) {
+                              role_id = res3[i].id;
+                            }
+                          }
+
+                          connection.query(
+                            "UPDATE employee SET ? WHERE ?",
+                            [
+                              {
+                                role_id: role_id,
+                              },
+
+                              {
+                                id: employeeId,
+                              },
+                            ],
+                            function (err) {
+                              if (err) throw err;
+                              console.log("Employee's role has been changed.");
+                              questions();
+                            }
+                          );
+                        }
+                      );
+                    }
+                  );
+                });
             }
           );
         });

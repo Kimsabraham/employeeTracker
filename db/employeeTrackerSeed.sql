@@ -5,6 +5,6 @@ VALUES ("Engineer",100000,1),
 ("Collaborator", 45000,2),
 ("Recruiter",60000,3);
 INSERT INTO employee (first_name, last_name,role_id) 
-VALUES ("IT", "Sales", 1),
-("Bob", "Linda", 2),
+VALUES ("Rob", "Stark", 1),
+("Bob", "Lee", 2),
 ("Fred", "Frank", 3);

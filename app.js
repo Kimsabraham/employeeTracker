@@ -1,5 +1,5 @@
 // dependencies
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const inquirer = require("inquirer");
 
 // SQL connection
@@ -7,8 +7,8 @@ const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "123",
-  database: "employeeTracker",
+  password: "July301993!",
+  database: "employee_trackerDB",
 });
 
 // starts application
@@ -27,7 +27,7 @@ function questions() {
       message: "Choose below.",
       choices: [
         "View All employees",
-        "View All employees by repartment",
+        "View All employees by department",
         "View All employees by role",
         "Create a new department",
         "Create a new role",

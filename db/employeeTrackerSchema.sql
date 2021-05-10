@@ -38,15 +38,15 @@ VALUES ("Management"),
 
 INSERT INTO role (title, salary, department_id)
 VALUES ("Manager", 60000, 1), 
-("Creative Director", 48000, 4), 
-("Marketing", 49000, 5),
-("Sales", 48000, 5),
-("Accountant", 43000, 8),
-("Operations", 40000, 8), 
-("Research", 85000, 9),
-("HR", 70000, 9),
-("Customer Service Rep", 40000, 8),
-("IT", 100000, 9);
+("Creative Director", 48000, 2), 
+("Marketing", 49000, 3),
+("Sales", 48000, 3),
+("Accountant", 43000, 2),
+("Operations", 40000, 2), 
+("Research", 85000, 1),
+("HR", 70000, 2),
+("Customer Service Rep", 40000, 3),
+("IT", 100000, 2);
 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)

@@ -125,3 +125,115 @@ function viewRoles() {
       runApp();
     });
   });
+}
+function addDep() {
+  prompt({
+    name: "newDepartment",
+    type: "input",
+    message:
+      "What is the Name of the new Department that you would like to add",
+  }).then(function (answer) {
+    const query = `INSERT INTO department (name)
+        VALUES (?);
+        `;
+    connection.query(query, [answer.newDepartment], function (err, res) {
+      console.table(res);
+      console.log("Its been added!");
+      runApp();
+    });
+  });
+}
+function addRole() {
+  prompt([
+    {
+      name: "newRole",
+      type: "input",
+      message: "Title of the new Role?",
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "Salary of the new Role?",
+    },
+    {
+      name: "departmentId",
+      type: "input",
+      message:
+        "What is the Department Id of the new Role?"
+    },
+  ]).then(function (answer) {
+    const query = `INSERT INTO role (title, salary, department_id)
+        VALUES (?, ?, ?);
+        `;
+    connection.query(
+      query,
+      [answer.newRole, answer.salary, answer.departmentId],
+      function (err, res) {
+        console.table(res);
+        console.log("Its been added!");
+        runApp();
+      }
+    );
+  });
+}
+function addEmployee() {
+  prompt([
+    {
+      name: "firstName",
+      type: "input",
+      message: "First name of the new Employee?",
+    },
+    {
+      name: "lastName",
+      type: "input",
+      message: "Last name of the new employee?",
+    },
+  ]).then(function (answer) {
+    const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+        VALUES (?, ?, 4, 1);
+        `;
+    connection.query(
+      query,
+      [answer.firstName, answer.lastName],
+      function (err, res) {
+        console.table(res);
+        console.log("Its been added!");
+        runApp();
+      }
+    );
+  });
+}
+function updateRole() {
+  prompt([
+    {
+      name: "title",
+      type: "input",
+      message: "New title of the role you want to update?",
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "New salary of the updated Role?",
+    },
+    {
+      name: "departmentId",
+      type: "input",
+      message:
+        "New department Id of the updated Role?"
+    },
+  ]).then(function (answer) {
+    const query = `UPDATE role 
+        SET title = ?, salary = ?, department_id = ?
+        WHERE title = ?;
+        `;
+    connection.query(
+      query,
+      [answer.title, answer.salary, answer.departmentId, answer.title],
+      function (err, res) {
+        console.table(res);
+        console.log("Its been added!");
+        runApp();
+      }
+    );
+  });
+}

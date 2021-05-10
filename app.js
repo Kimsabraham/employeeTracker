@@ -35,13 +35,13 @@ function runApp() {
   }).then(function (answer) {
     switch (answer.action) {
       case "View All Employees":
-        viewAllEmployees();
+        viewEmployees();
         break;
       case "View All Employees by Department":
-        viewAllDep();
+        viewDep();
         break;
       case "View All Employees by Role":
-        viewAllRole();
+        viewRoles();
         break;
       case "Add a Department":
         addDep();
@@ -61,3 +61,67 @@ function runApp() {
     }
   });
 }
+// functions of user inputs
+function viewEmployees() {
+  var query = `SELECT employee.first_name, employee.last_name, 
+    employee.role_id, role.title, role.salary, role.id
+    FROM employee 
+    INNER JOIN role ON (employee.role_id = role.id)
+    ORDER BY employee.role_id    
+    `;
+  connection.query(query, null, function (err, res) {
+    console.table(res);
+  });
+  runApp();
+}
+function viewDep() {
+  prompt({
+    name: "department",
+    type: "input",
+    message: "Which Department would you like to view?",
+  }).then(function (answer) {
+    var query = `SELECT department.name, employee.role_id, department.id, 
+        employee.first_name, employee.last_name, role.department_id, role.id
+        FROM department 
+        INNER JOIN role ON (department.id = role.department_id)
+        INNER JOIN employee ON (role.id = employee.role_id)
+        WHERE (department.name = ?)
+        ORDER BY department.id
+        `;
+    connection.query(query, [answer.department], function (err, res) {
+      console.table(res);
+      runApp();
+    });
+  });
+}
+// list of roles
+function viewRoles() {
+  prompt({
+    name: "role",
+    type: "rawlist",
+    message: "Which Role would you like to view?",
+    choices: [
+      "Manager",
+      "Creative Director",
+      "Marketing",
+      "Sales Team",
+      "Accountant",
+      "Operations",
+      "Researche",
+      "HR Representative",
+      "Customer Service Rep.",
+      "IT",
+    ],
+  }).then(function (answer) {
+    var query = `SELECT employee.role_id, employee.first_name, employee.last_name, 
+        role.department_id, role.title, role.salary
+        FROM role 
+        INNER JOIN employee ON (role.id = employee.role_id)
+        WHERE (role.title = ?)
+        ORDER BY role.title
+        `;
+    connection.query(query, [answer.role, answer.role], function (err, res) {
+      console.table(res);
+      runApp();
+    });
+  });
